@@ -19,3 +19,16 @@ after_success:
   - docker push alegf/fibo-server
   - docker push alegf/fibo-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: "sa-east-1"
+  app: "complex-fibo"
+  env: "ComplexFibo-env"
+  bucket_name: "elasticbeanstalk-sa-east-1-940550933324"
+  bucket-path: "complex-fibo"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
+
