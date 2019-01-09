@@ -1,0 +1,21 @@
+sudo: required
+servives:
+  - docker
+
+before_install:
+  - docker build -t alegf/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run alegf/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t alegf/fibo-client ./client
+  - docker build -t alegf/fibo-nginx ./nginx
+  - docker build -t alegf/fibo-server ./server
+  - docker build -t alegf/fibo-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push alegf/fibo-client
+  - docker push alegf/fibo-nginx 
+  - docker push alegf/fibo-server
+  - docker push alegf/fibo-worker
+
